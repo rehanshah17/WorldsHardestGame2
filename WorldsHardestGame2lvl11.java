@@ -14,8 +14,10 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
     private int speed;
     private int hor;
     private int vert;
+	private int fails;
 	private Rectangle r1, r2;
-	private Polygon poly;
+	private Polygon border;
+	private Polygon board;
 	private JFrame frame;
 	private Thread t;
 	private boolean gameOn;
@@ -29,16 +31,20 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		y=200;
 		a = 400;
 		b = 200;
-        speed = 3;
+        speed = 2;
         hor = 0;
         vert = 0;
+		fails = 0;
 		gameOn=true;
 		r1 = new Rectangle(x,y,25,25);
 		r2 = new Rectangle(a,b,50,50);
-		int[] xPoints = {100, 150, 150, 200, 200, 100};
-		int[] yPoints = {100, 100, 200, 200, 250, 250};
-		poly = new Polygon(xPoints, yPoints, xPoints.length);
-		f=new Font("TIMES NEW ROMAN",Font.PLAIN,50);
+		int[] boarderXPoints = {295, 405, 405, 455, 455, 405, 405, 295, 295, 245, 245, 295};
+		int[] boarderYPoints = {120, 120, 220, 220, 330, 330, 430, 430, 330, 330, 220, 220};
+		border = new Polygon(boarderXPoints, boarderYPoints, boarderXPoints.length);
+		int[] xPoints = {300, 400, 400, 450, 450, 400, 400, 300, 300, 250, 250, 300};
+		int[] yPoints = {125, 125, 225, 225, 325, 325, 425, 425, 325, 325, 225, 225};
+		board = new Polygon(xPoints, yPoints, xPoints.length);
+		f=new Font("ARIAL",Font.PLAIN,23);
 		backGround = new Color(171,162,252);
 		green =  new Color(158, 242, 155);
 		frame.addKeyListener(this);
@@ -59,24 +65,64 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		//The painting imps aren't fond of math.
 		//fill background
 		g2d.setPaint(Color.BLACK);
-		g2d.fillRect(0,0,800,500);
+		g2d.fillRect(0,0,800,600);
+		g2d.setPaint(backGround);
+		g2d.fillRect(0,50,700,450);
 
 		//draw scoreboard
-		g2d.setColor(Color.RED);
+		g2d.setColor(Color.WHITE);
 		g2d.setFont(f);
-		g2d.drawString("A",50,50);
+		g2d.drawString("LEVEL: 11",0,50);
+		g2d.drawString("COINS",325,50);
+		g2d.drawString("FAILS: "  + fails,600,50);
 
 		//enemy
-		g2d.setColor(Color.GREEN);
-		g2d.fillRect(a,b,50,50);
+		
 
 		//polygon
-		g2d.setColor(Color.MAGENTA);
-		g2d.fill(poly);
+		g2d.setColor(Color.BLACK);
+		g2d.fill(border);
+		g2d.setColor(Color.WHITE);
+		g2d.fill(board);
+		g2d.setPaint(green);
+		g2d.fillRect(300,125,100,50);
+		g2d.fillRect(300,375,100,50);
+
+		int tileWidth = 25;
+		int tileX = 250;
+		boolean left = true;
+		for(int numRows = 1; numRows <= 4; numRows++)
+		{
+			tileX = 250;
+			for(int j = 0 ; j < 1; j++)
+			{
+
+				if(left)
+				{
+					g2d.setColor(Color.BLACK);
+					g2d.fillRect(250,225,25,25);
+					
+				}
+				else{
+					g2d.setColor(Color.WHITE);
+					g2d.fillRect(250,225,25,25);
+				}
+				left = !left;
+				
+			}
+			left = !left;
+			
+
+		}
+
+		//g2d.setPaint(backGround);
+		//g2d.fillRect(0,50,700,450);
 
 		//Your character
-		g2d.setColor(Color.BLUE);
-		g2d.fillOval(x,y,25,25);
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(x,y,18,18);
+		g2d.setColor(Color.RED);
+		g2d.fillRect(x+3,y+3,12,12);
 
 	}
 	public void run()
@@ -96,7 +142,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 					System.out.println("OUCH");
 
 				//must be entirely inside for contains to be true
-				if (poly.contains(r1))
+				if (border.contains(r1))
 					System.out.println("INSIDE");
 
 				
