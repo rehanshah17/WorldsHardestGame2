@@ -20,7 +20,8 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	private Thread t;
 	private boolean gameOn;
 	private Font f;
-	private Color color;
+	private Color backGround;
+	private Color green;
 	public WorldsHardestGame2lvl11()
 	{
 		frame=new JFrame();
@@ -38,9 +39,11 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		int[] yPoints = {100, 100, 200, 200, 250, 250};
 		poly = new Polygon(xPoints, yPoints, xPoints.length);
 		f=new Font("TIMES NEW ROMAN",Font.PLAIN,50);
+		backGround = new Color(171,162,252);
+		green =  new Color(158, 242, 155);
 		frame.addKeyListener(this);
 		frame.add(this);
-		frame.setSize(800,500);
+		frame.setSize(700,550);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		t=new Thread(this);
@@ -141,6 +144,6 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	}
 	public static void main(String args[])
 	{
-		EndOfYearProjectStarterCode app=new EndOfYearProjectStarterCode();
+		WorldsHardestGame2lvl11 app = new WorldsHardestGame2lvl11();
 	}
 }
