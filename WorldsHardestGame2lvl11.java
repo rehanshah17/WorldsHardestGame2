@@ -24,6 +24,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	private Font f;
 	private Color backGround;
 	private Color green;
+	private Color tile;
 	public WorldsHardestGame2lvl11()
 	{
 		frame=new JFrame();
@@ -47,6 +48,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		f=new Font("ARIAL",Font.PLAIN,23);
 		backGround = new Color(171,162,252);
 		green =  new Color(158, 242, 155);
+		tile = new Color(224,218,254);
 		frame.addKeyListener(this);
 		frame.add(this);
 		frame.setSize(700,550);
@@ -88,30 +90,94 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.fillRect(300,125,100,50);
 		g2d.fillRect(300,375,100,50);
 
-		int tileWidth = 25;
+		//left side checkerboard
+		int tileDim = 25;
 		int tileX = 250;
-		boolean left = true;
-		for(int numRows = 1; numRows <= 4; numRows++)
+		int tileY = 225;
+		boolean place = true;
+		for(int numRows = 1; numRows <= 2; numRows++)
 		{
 			tileX = 250;
-			for(int j = 0 ; j < 1; j++)
+			for(int j = 0 ; j <= 1; j++)
 			{
 
-				if(left)
+				if(place)
 				{
-					g2d.setColor(Color.BLACK);
-					g2d.fillRect(250,225,25,25);
-					
+					g2d.setColor(tile);
+					g2d.fillRect(tileX,tileY,25,25);
+					tileX += tileDim;
+					tileY += tileDim;
 				}
 				else{
-					g2d.setColor(Color.WHITE);
-					g2d.fillRect(250,225,25,25);
+					g2d.setColor(tile);
+					g2d.fillRect(tileX,tileY,25,25);
+					tileX += tileDim;
+					tileY += tileDim;
 				}
-				left = !left;
+				place = !(place);
+				
 				
 			}
-			left = !left;
-			
+
+		}
+		//middle checkerboard
+		
+		tileDim = 25;
+		tileX = 300;
+		tileY = 175;
+		boolean alt = true;
+		for(int numRows = 1; numRows <= 8; numRows++)
+		{
+			for(int j = 0 ; j <= 3; j++)
+			{
+				if(alt)
+				{
+					tileX = 300;
+					g2d.setColor(tile);
+					g2d.fillRect(tileX,tileY,25,25);
+					tileX +=50;
+					g2d.fillRect(tileX,tileY,25,25);
+				}else
+				{
+					tileX = 325;
+					g2d.setColor(tile);
+					g2d.fillRect(tileX,tileY,25,25);
+					tileX +=50;
+					g2d.fillRect(tileX,tileY,25,25);
+				}
+			}
+			alt = !(alt);
+			tileY += tileDim;
+
+		}
+
+		//right side checkerboard
+		tileX = 400;
+		tileY = 225;
+		place = true;
+		for(int numRows = 1; numRows <= 2; numRows++)
+		{
+			tileX = 400;
+			for(int j = 0 ; j <= 1; j++)
+			{
+
+				if(place)
+				{
+					g2d.setColor(tile);
+					g2d.fillRect(tileX,tileY,25,25);
+					tileX += tileDim;
+					tileY += tileDim;
+				}
+				else{
+					g2d.setColor(tile);
+					g2d.fillRect(tileX,tileY,25,25);
+					tileX += tileDim;
+					tileY += tileDim;
+				}
+				place = !(place);
+				
+				
+			}
 
 		}
 
