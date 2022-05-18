@@ -11,11 +11,12 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	private int y;
 	private int a;
 	private int b;
+	private int R1;
     private int speed;
     private int hor;
     private int vert;
 	private int fails;
-	private Rectangle r1, r2;
+	private Rectangle e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16;
 	private Polygon border;
 	private Polygon board;
 	private JFrame frame;
@@ -23,6 +24,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	private boolean gameOn;
 	private Font f;
 	private Color backGround;
+	private Color playerBorder;
 	private Color green;
 	private Color tile;
 	public WorldsHardestGame2lvl11()
@@ -30,15 +32,14 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		frame=new JFrame();
 		x=1;
 		y=200;
-		a = 400;
-		b = 200;
+		a = 255;
+		b = 230;
+		R1 = 431;
         speed = 2;
         hor = 0;
         vert = 0;
 		fails = 0;
 		gameOn=true;
-		r1 = new Rectangle(x,y,25,25);
-		r2 = new Rectangle(a,b,50,50);
 		int[] boarderXPoints = {295, 405, 405, 455, 455, 405, 405, 295, 295, 245, 245, 295};
 		int[] boarderYPoints = {120, 120, 220, 220, 330, 330, 430, 430, 330, 330, 220, 220};
 		border = new Polygon(boarderXPoints, boarderYPoints, boarderXPoints.length);
@@ -47,6 +48,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		board = new Polygon(xPoints, yPoints, xPoints.length);
 		f=new Font("ARIAL",Font.PLAIN,23);
 		backGround = new Color(171,162,252);
+		playerBorder = new Color(127,0,0);
 		green =  new Color(158, 242, 155);
 		tile = new Color(224,218,254);
 		frame.addKeyListener(this);
@@ -185,10 +187,35 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		//g2d.fillRect(0,50,700,450);
 
 		//Your character
-		g2d.setColor(Color.BLACK);
-		g2d.fillRect(x,y,18,18);
+		g2d.setColor(playerBorder);
+		g2d.fillRect(x,y,19,19);
 		g2d.setColor(Color.RED);
-		g2d.fillRect(x+3,y+3,12,12);
+		g2d.fillRect(x+4,y+4,11,11);
+
+		//enemy
+		//L1
+		g2d.setColor(Color.BLACK); 
+		g2d.fillOval(a,b,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(a+3,b+3,8,8);
+
+		//L2
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(a,b+50,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(a+3,b+53,8,8);
+
+		//R1
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(R1,b+25,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(R1+3,b+28,8,8);
+
+		//R2
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(R1,b+75,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(R1+3,b+78,8,8);
 
 	}
 	public void run()
@@ -202,14 +229,8 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 				//modify points
 
 				//intersection is true if even one point is shared
-				r1 = new Rectangle(x,y,25,25);
-				r2 = new Rectangle(a,b,50,50);
-				if (r1.intersects(r2))
-					System.out.println("OUCH");
 
 				//must be entirely inside for contains to be true
-				if (border.contains(r1))
-					System.out.println("INSIDE");
 
 				
                 x += hor;
@@ -219,6 +240,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 					t.sleep(10);
 				}catch(InterruptedException e)
 				{
+
 				}
 				repaint();
 			}
