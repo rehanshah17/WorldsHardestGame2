@@ -12,7 +12,11 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	private int a;
 	private int b;
 	private int R1;
+	private int U1;
+	private int D1;
     private int speed;
+	private int enemySpeed;
+	private int eSpeed;
     private int hor;
     private int vert;
 	private int fails;
@@ -30,12 +34,16 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	public WorldsHardestGame2lvl11()
 	{
 		frame=new JFrame();
-		x=1;
-		y=200;
+		x=350;
+		y=150;
 		a = 255;
 		b = 230;
 		R1 = 431;
+		U1 = 181;
+		D1 = 355;
         speed = 2;
+		enemySpeed = 2;
+		eSpeed = -2;
         hor = 0;
         vert = 0;
 		fails = 0;
@@ -217,6 +225,30 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.setColor(Color.BLUE);
 		g2d.fillOval(R1+3,b+78,8,8);
 
+		//U1
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(306,U1,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(309,U1+3,8,8);
+
+		//U2
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(356,U1,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(359,U1,8,8);
+
+		//D1
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(331,D1,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(334,D1+3,8,8);
+
+		//D2
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(381,D1,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(384,D1,8,8);
+
 	}
 	public void run()
 	{
@@ -229,12 +261,72 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 				//modify points
 
 				//intersection is true if even one point is shared
-
+				/*a = 255;
+				b = 230;
+				R1 = 431;
+				U1 = 181;
+				D1 = 355;
+				*/ 
 				//must be entirely inside for contains to be true
 
-				
-                x += hor;
-				y += vert;
+				if(board.contains(new Rectangle(x + hor,y,19,19)))
+                	x += hor;
+
+				if(board.contains(new Rectangle(x,y  + vert,19,19)))
+					y += vert;
+
+				R1 += eSpeed;
+				D1 += eSpeed;
+				//L1
+				if(board.contains(new Rectangle(a + enemySpeed,b,14,14)))
+				{ 
+					a+=enemySpeed;
+				}
+				else{
+					enemySpeed *=-1;
+				}
+				//U1
+				if(board.contains(new Rectangle(306 + enemySpeed,b,14,14)))
+				{ 
+					U1+=enemySpeed;
+				}
+				else{
+					enemySpeed *=-1;
+				}
+				//R1
+				/*
+				if(board.contains(new Rectangle(R1 + eSpeed,b,14,14)))
+				{ 
+					a+=eSpeed;
+				}
+				else{
+					eSpeed *=-1;
+				}
+				//D1
+				if(board.contains(new Rectangle(306 + eSpeed,b,14,14)))
+				{ 
+					U1+=eSpeed;
+				}
+				else{
+					eSpeed *=-1;
+				}
+				*/
+				/*//R1
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(R1,b+25,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(R1+3,b+28,8,8);
+
+		//R2
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(R1,b+75,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(R1+3,b+78,8,8);
+		
+					*/
+
+			
+					
 				try
 				{
 					t.sleep(10);
