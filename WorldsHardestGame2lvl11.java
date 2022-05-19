@@ -42,8 +42,8 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		U1 = 181;
 		D1 = 355;
         speed = 2;
-		enemySpeed = 2;
-		eSpeed = -2;
+		enemySpeed = 3;
+		eSpeed = -3;
         hor = 0;
         vert = 0;
 		fails = 0;
@@ -256,27 +256,16 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		{
 			if(gameOn)
 			{
-				//MATH HAPPENS HERE!!!!
-				//keep count of steps
-				//modify points
-
-				//intersection is true if even one point is shared
-				/*a = 255;
-				b = 230;
-				R1 = 431;
-				U1 = 181;
-				D1 = 355;
-				*/ 
-				//must be entirely inside for contains to be true
-
+				
+				//border collisions
 				if(board.contains(new Rectangle(x + hor,y,19,19)))
                 	x += hor;
 
 				if(board.contains(new Rectangle(x,y  + vert,19,19)))
 					y += vert;
 
-				R1 += eSpeed;
-				D1 += eSpeed;
+				
+				//Border control for the enemies 
 				//L1
 				if(board.contains(new Rectangle(a + enemySpeed,b,14,14)))
 				{ 
@@ -286,7 +275,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 					enemySpeed *=-1;
 				}
 				//U1
-				if(board.contains(new Rectangle(306 + enemySpeed,b,14,14)))
+				if(board.contains(new Rectangle(306,U1 + enemySpeed,14,14)))
 				{ 
 					U1+=enemySpeed;
 				}
@@ -294,38 +283,22 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 					enemySpeed *=-1;
 				}
 				//R1
-				/*
-				if(board.contains(new Rectangle(R1 + eSpeed,b,14,14)))
+				if(board.contains(new Rectangle(R1 + eSpeed,b + 25,14,14)))
 				{ 
-					a+=eSpeed;
+					R1+=eSpeed;
 				}
 				else{
 					eSpeed *=-1;
 				}
 				//D1
-				if(board.contains(new Rectangle(306 + eSpeed,b,14,14)))
+				if(board.contains(new Rectangle(306,D1 + eSpeed,14,14)))
 				{ 
-					U1+=eSpeed;
+					D1+=eSpeed;
 				}
 				else{
 					eSpeed *=-1;
-				}
-				*/
-				/*//R1
-		g2d.setColor(Color.BLACK);
-		g2d.fillOval(R1,b+25,14,14);
-		g2d.setColor(Color.BLUE);
-		g2d.fillOval(R1+3,b+28,8,8);
+				}	
 
-		//R2
-		g2d.setColor(Color.BLACK);
-		g2d.fillOval(R1,b+75,14,14);
-		g2d.setColor(Color.BLUE);
-		g2d.fillOval(R1+3,b+78,8,8);
-		
-					*/
-
-			
 					
 				try
 				{
@@ -339,6 +312,42 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		}
 	}
 
+	public void checkCollision()
+	{g2d.setColor(Color.BLACK);
+		g2d.fillOval(306,U1,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(309,U1+3,8,8);
+
+		//U2
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(356,U1,14,14);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(359,U1,8,8);
+		if((new Rectangle(x,y,20,20).intersects(new Rectangle(306,U1,14,14))))//U1
+		{
+			fails++;
+			x=350;
+			y=150;
+		}
+		if((new Rectangle(x,y,20,20).intersects(new Rectangle(356,U1,14,14))))//2
+		{
+			fails++;
+			x=350;
+			y=150;
+		}
+		if((new Rectangle(x,y,20,20).intersects(new Rectangle(331,D1,14,14))))//D1
+		{
+			fails++;
+			x=350;
+			y=150;
+		}
+		if((new Rectangle(x,y,20,20).intersects(new Rectangle(381,D1,14,14))))//D2
+		{
+			fails++;
+			x=350;
+			y=150;
+		}
+	}
 	public void keyPressed(KeyEvent ke)
 	{
 
