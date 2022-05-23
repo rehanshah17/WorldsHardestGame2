@@ -18,9 +18,18 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	private int enemySpeed;
 	private int eSpeed;
     private int hor;
+  	private int c1X;
+	private int c1Y;
+	private int c2X;
+	private int c2Y;
+	private int c3X;
+	private int c3Y;
+	private int c4X;
+	private int c4Y;
     private int vert;
 	private int fails;
 	private Rectangle c1,c2,c3,c4;
+	private int coins;
 	private Polygon border;
 	private Polygon board;
 	private JFrame frame;
@@ -44,12 +53,21 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		R1 = 431;
 		U1 = 181;
 		D1 = 355;
+		c1X = 267;
+		c1Y = 242;
+		c2X = 267;
+		c2Y = 292;
+		c3X = 417;
+		c3Y = 242;
+		c4X = 417;
+	 	c4Y = 292;
         speed = 2;
 		enemySpeed = 3;
 		eSpeed = -3;
         hor = 0;
         vert = 0;
 		fails = 0;
+		coins = 0;
 		gameOn=true;
 		int[] boarderXPoints = {295, 405, 405, 455, 455, 405, 405, 295, 295, 245, 245, 295};
 		int[] boarderYPoints = {120, 120, 220, 220, 330, 330, 430, 430, 330, 330, 220, 220};
@@ -57,7 +75,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		int[] xPoints = {300, 400, 400, 450, 450, 400, 400, 300, 300, 250, 250, 300};
 		int[] yPoints = {125, 125, 225, 225, 325, 325, 425, 425, 325, 325, 225, 225};
 		board = new Polygon(xPoints, yPoints, xPoints.length);
-		f=new Font("ARIAL",Font.PLAIN,23);
+		f=new Font("ARIAL",Font.PLAIN,35);
 		backGround = new Color(171,162,252);
 		playerBorder = new Color(127,0,0);
 		green =  new Color(158, 242, 155);
@@ -89,9 +107,9 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		//draw scoreboard
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(f);
-		g2d.drawString("LEVEL: 11",0,50);
-		g2d.drawString("COINS",325,50);
-		g2d.drawString("FAILS: "  + fails,600,50);
+		g2d.drawString("LEVEL: 11",0,40);
+		g2d.drawString("COINS: " + coins,300,40);
+		g2d.drawString("FAILS: "  + fails,550,40);
 
 
 		//polygon
@@ -128,13 +146,13 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 					tileY += tileDim;
 				}
 				place = !(place);
-				
-				
+
+
 			}
 
 		}
 		//middle checkerboard
-		
+
 		tileDim = 25;
 		tileX = 300;
 		tileY = 175;
@@ -188,8 +206,8 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 					tileY += tileDim;
 				}
 				place = !(place);
-				
-				
+
+
 			}
 
 		}
@@ -206,30 +224,30 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 
 		//coins
 		g2d.setColor(outerCoinYellow);//Top Left Coin
-		g2d.fillOval(267, 242, 16, 16);
+		g2d.fillOval(c1X, c1Y, 16, 16);
 		g2d.setColor(innerCoinYellow);
-		g2d.fillOval(271, 246, 8, 8);
-		
+		g2d.fillOval(c1X+4, c1Y+4, 8, 8);
+
 		g2d.setColor(outerCoinYellow);//Bottom Left Coin
-		g2d.fillOval(267, 292, 16, 16);
+		g2d.fillOval(c2X, c2Y, 16, 16);
 		g2d.setColor(innerCoinYellow);
-		g2d.fillOval(271, 296, 8, 8);
+		g2d.fillOval(c2X+4, c2Y+4, 8, 8);
 
 
 		g2d.setColor(outerCoinYellow);//Top Right Coin
-		g2d.fillOval(417, 242, 16, 16);
+		g2d.fillOval(c3X, c3Y, 16, 16);
 		g2d.setColor(innerCoinYellow);
-		g2d.fillOval(421, 246, 8, 8);
+		g2d.fillOval(c3X+4, c3Y+4, 8, 8);
 
 
 		g2d.setColor(outerCoinYellow);//Right Bottom Coin
-		g2d.fillOval(417, 292, 16, 16);
+		g2d.fillOval(c4X, c4Y, 16, 16);
 		g2d.setColor(innerCoinYellow);
-		g2d.fillOval(421, 296, 8, 8);
+		g2d.fillOval(c4X+4, c4Y+4, 8, 8);
 
 		//enemy
 		//L1
-		g2d.setColor(Color.BLACK); 
+		g2d.setColor(Color.BLACK);
 		g2d.fillOval(a,b,14,14);
 		g2d.setColor(Color.BLUE);
 		g2d.fillOval(a+3,b+3,8,8);
@@ -262,7 +280,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.setColor(Color.BLACK);
 		g2d.fillOval(356,U1,14,14);
 		g2d.setColor(Color.BLUE);
-		g2d.fillOval(359,U1,8,8);
+		g2d.fillOval(359,U1+3,8,8);
 
 		//D1
 		g2d.setColor(Color.BLACK);
@@ -274,7 +292,18 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.setColor(Color.BLACK);
 		g2d.fillOval(381,D1,14,14);
 		g2d.setColor(Color.BLUE);
-		g2d.fillOval(384,D1,8,8);
+		g2d.fillOval(384,D1+3,8,8);
+
+
+		if((coins == 4&&(new Rectangle(x,y,20,20).intersects(new Rectangle(300,125,100,50))))||(coins == 4&&(new Rectangle(x,y,20,20).intersects(new Rectangle(300,375,100,50)))))
+		{
+			gameOn = false;
+			g2d.fillRect(0,0,1000,1000);
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(f);
+			g2d.drawString("YOU WIN",0,40);
+
+		}
 
 	}
 	public void run()
@@ -283,16 +312,48 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		{
 			if(gameOn)
 			{
+
+
+				c1 = new Rectangle(c1X, c1Y, 16, 16);
+				c2 = new Rectangle(c2X, c2Y, 16, 16);
+				c3 = new Rectangle(c3X, c3Y, 16, 16);
+				c4 = new Rectangle(c4X, c4Y, 16, 16);
+
+				if(new Rectangle(x,y,19,19).intersects(c1))
+				{
+					coins++;
+					c1X = 1000;
+					c1Y = 1000;
+				}
+				if(new Rectangle(x,y,19,19).intersects(c2))
+				{
+					coins++;
+					c2X = 1000;
+					c2Y = 1000;
+				}
+				if(new Rectangle(x,y,19,19).intersects(c3))
+				{
+					coins++;
+					c3X = 1000;
+					c3Y = 1000;
+				}
+				if(new Rectangle(x,y,19,19).intersects(c4))
+				{
+					coins++;
+					c4X = 1000;
+					c4Y = 1000;
+				}
+
 				checkCollision();
 				checkBorderCollisions();
-				
+
 				//player collisions
 				if(board.contains(new Rectangle(x + hor,y,19,19)))
                 	x += hor;
 
 				if(board.contains(new Rectangle(x,y  + vert,19,19)))
 					y += vert;
-				
+
 				if((new Rectangle(x,y,20,20).intersects(new Rectangle(300,375,100,50))))
 					checkPoint = true;
 
@@ -311,7 +372,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	public void respawn()
 	{
 		if(checkPoint)
-		{ 
+		{
 			x = 341;
 			y = 391;
 		}
@@ -319,7 +380,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 			x = 341;
 			y = 141;
 		}
-		
+
 	}
 
 	public void checkCollision()
@@ -370,7 +431,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	{
 		//L1
 		if(board.contains(new Rectangle(a + enemySpeed,b,14,14)))
-		{ 
+		{
 			a+=enemySpeed;
 		}
 		else{
@@ -378,7 +439,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		}
 		//U1
 		if(board.contains(new Rectangle(306,U1 + enemySpeed,14,14)))
-		{ 
+		{
 			U1+=enemySpeed;
 		}
 		else{
@@ -386,7 +447,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		}
 		//R1
 		if(board.contains(new Rectangle(R1 + eSpeed,b + 25,14,14)))
-		{ 
+		{
 			R1+=eSpeed;
 		}
 		else{
@@ -394,12 +455,12 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		}
 		//D1
 		if(board.contains(new Rectangle(306,D1 + eSpeed,14,14)))
-		{ 
+		{
 			D1+=eSpeed;
 		}
 		else{
 			eSpeed *=-1;
-		}	
+		}
 	}
 	public void keyPressed(KeyEvent ke)
 	{
