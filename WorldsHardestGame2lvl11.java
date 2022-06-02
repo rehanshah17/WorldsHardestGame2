@@ -29,7 +29,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
     private int vert;
 	private int fails;
 	private Rectangle c1,c2,c3,c4;
-	private int coins;
+	private int coin;
 	private Polygon border;
 	private Polygon board;
 	private JFrame frame;
@@ -42,7 +42,9 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	private Color tile;
 	private Color innerCoinYellow;
 	private Color outerCoinYellow;
-	private boolean checkPoint;
+	private boolean checkPoint,firstTime;
+	private boolean w1,w2,w3,w4;
+	private boolean [] coinCollect;
 	public WorldsHardestGame2lvl11()
 	{
 		frame=new JFrame();
@@ -62,12 +64,12 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		c4X = 417;
 	 	c4Y = 292;
         speed = 2;
-		enemySpeed = 3;
-		eSpeed = -3;
+		enemySpeed = 0;
+		eSpeed = -0;
         hor = 0;
         vert = 0;
 		fails = 0;
-		coins = 0;
+		coin = 0;
 		gameOn=true;
 		int[] boarderXPoints = {295, 405, 405, 455, 455, 405, 405, 295, 295, 245, 245, 295};
 		int[] boarderYPoints = {120, 120, 220, 220, 330, 330, 430, 430, 330, 330, 220, 220};
@@ -89,6 +91,13 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		t=new Thread(this);
 		t.start();
+
+		w1 = false;
+		w2 = false;
+		w3 = false;
+		w4 = false;
+		coinCollect = new boolean[] {false,false,false,false};
+		firstTime = false;
 	}
 	public void paintComponent(Graphics g)
 	{
@@ -108,7 +117,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(f);
 		g2d.drawString("LEVEL: 11",0,40);
-		g2d.drawString("COINS: " + coins,300,40);
+		g2d.drawString("COINS: " + coin,300,40);
 		g2d.drawString("FAILS: "  + fails,550,40);
 
 
@@ -223,27 +232,37 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 
 
 		//coins
+		if(!w1)
+		{
 		g2d.setColor(outerCoinYellow);//Top Left Coin
 		g2d.fillOval(c1X, c1Y, 16, 16);
 		g2d.setColor(innerCoinYellow);
 		g2d.fillOval(c1X+4, c1Y+4, 8, 8);
+		}
 
+		if(!w2)
+		{
 		g2d.setColor(outerCoinYellow);//Bottom Left Coin
 		g2d.fillOval(c2X, c2Y, 16, 16);
 		g2d.setColor(innerCoinYellow);
 		g2d.fillOval(c2X+4, c2Y+4, 8, 8);
+		}
 
-
+		if(!w3)
+		{
 		g2d.setColor(outerCoinYellow);//Top Right Coin
 		g2d.fillOval(c3X, c3Y, 16, 16);
 		g2d.setColor(innerCoinYellow);
 		g2d.fillOval(c3X+4, c3Y+4, 8, 8);
+		}
 
-
+		if(!w4)
+		{
 		g2d.setColor(outerCoinYellow);//Right Bottom Coin
 		g2d.fillOval(c4X, c4Y, 16, 16);
 		g2d.setColor(innerCoinYellow);
 		g2d.fillOval(c4X+4, c4Y+4, 8, 8);
+		}
 
 		//enemy
 		//L1
@@ -295,7 +314,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.fillOval(384,D1+3,8,8);
 
 
-		if((coins == 4&&(new Rectangle(x,y,20,20).intersects(new Rectangle(300,125,100,50))))||(coins == 4&&(new Rectangle(x,y,20,20).intersects(new Rectangle(300,375,100,50)))))
+		if(w1&&w2&&w3&&w4&&y>375)
 		{
 			gameOn = false;
 			g2d.fillRect(0,0,1000,1000);
@@ -321,31 +340,43 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 
 				if(new Rectangle(x,y,19,19).intersects(c1))
 				{
-					coins++;
 					c1X = 1000;
 					c1Y = 1000;
+					w1 = true;
 				}
 				if(new Rectangle(x,y,19,19).intersects(c2))
 				{
-					coins++;
 					c2X = 1000;
 					c2Y = 1000;
+					w2 = true;
 				}
 				if(new Rectangle(x,y,19,19).intersects(c3))
 				{
-					coins++;
 					c3X = 1000;
 					c3Y = 1000;
+					w3 = true;
 				}
 				if(new Rectangle(x,y,19,19).intersects(c4))
 				{
-					coins++;
 					c4X = 1000;
 					c4Y = 1000;
+					w4 = true;
 				}
 
-				checkCollision();
-				checkBorderCollisions();
+				coin = 0;
+				if(w1)
+					coin++;
+				if(w2)
+					coin++;
+				if(w3)
+					coin++;
+				if(w4)
+					coin++;
+
+				if(checkPoint && !firstTime)
+					checkCheckPoint();
+					checkCollision();
+					checkBorderCollisions();
 
 				//player collisions
 				if(board.contains(new Rectangle(x + hor,y,19,19)))
@@ -357,6 +388,10 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 				if((new Rectangle(x,y,20,20).intersects(new Rectangle(300,375,100,50))))
 					checkPoint = true;
 
+				if(!firstTime && (new Rectangle(x,y,20,20).intersects(new Rectangle(300,125,100,50))))
+				{
+					checkPoint = true;
+				}
 				try
 				{
 					t.sleep(15);
@@ -383,47 +418,486 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 
 	}
 
+	public void checkCheckPoint()
+	{
+		if(w1)
+			coinCollect[0] = true;
+		if(w2)
+			coinCollect[1] = true;
+		if(w3)
+			coinCollect[2] = true;
+		if(w4)
+			coinCollect[3] = true;
+		firstTime = true;
+	}
+
 	public void checkCollision()
 	{
 		if((new Rectangle(x,y,20,20).intersects(new Rectangle(a,b,14,14))))//L1
 		{
 			fails++;
 			respawn();
+
+			if(!coinCollect[0])
+			{
+				w1 = false;
+				c1X = 267;
+				c1Y = 242;
+			}
+			if(!coinCollect[1])
+			{
+				w2 = false;
+				c2X = 267;
+				c2Y = 292;
+			}
+			if(!coinCollect[2])
+			{
+				w3 = false;
+				c3X = 417;
+				c3Y = 242;
+			}
+			if(!coinCollect[3])
+			{
+				w4 = false;
+				c4X = 417;
+	 			c4Y = 292;
+			}
 		}
 		if((new Rectangle(x,y,20,20).intersects(new Rectangle(a,b+50,14,14))))//L2
 		{
 			fails++;
 			respawn();
+			if(!coinCollect[0])
+			{
+				w1 = false;
+				c1X = 267;
+						c1Y = 242;
+			}
+			if(!coinCollect[1])
+			{
+				w2 = false;
+				c2X = 267;
+				c2Y = 292;
+			}
+			if(!coinCollect[2])
+			{
+				w3 = false;
+				c3X = 417;
+				c3Y = 242;
+			}
+			if(!coinCollect[3])
+			{
+				w4 = false;
+				c4X = 417;
+	 			c4Y = 292;
+			}
 		}
 		if((new Rectangle(x,y,20,20).intersects(new Rectangle(R1,b+25,14,14))))//R1
 		{
 			fails++;
 			respawn();
+			if(!coinCollect[0])
+					{
+						w1 = false;
+						c1X = 267;
+								c1Y = 242;
+					}
+					if(!coinCollect[1])
+								{
+									w2 = false;
+									c2X = 267;
+															c2Y = 292;
+					}
+					if(!coinCollect[2])
+								{
+									w3 = false;
+									c3X = 417;
+																						c3Y = 242;
+					}
+					if(!coinCollect[3])
+								{
+									w4 = false;
+									c4X = 417;
+			 	c4Y = 292;
+					}
 		}
 		if((new Rectangle(x,y,20,20).intersects(new Rectangle(R1,b+75,14,14))))//R2
 		{
 			fails++;
 			respawn();
+			if(!coinCollect[0])
+						{
+							w1 = false;
+							c1X = 267;
+									c1Y = 242;
+						}
+						if(!coinCollect[1])
+									{
+										w2 = false;
+										c2X = 267;
+																c2Y = 292;
+						}
+						if(!coinCollect[2])
+									{
+										w3 = false;
+										c3X = 417;
+																							c3Y = 242;
+						}
+						if(!coinCollect[3])
+									{
+										w4 = false;
+										c4X = 417;
+				 	c4Y = 292;
+						}
 		}
 		if((new Rectangle(x,y,20,20).intersects(new Rectangle(306,U1,14,14))))//U1
 		{
 			fails++;
 			respawn();
+			if(!coinCollect[0])
+						{
+							w1 = false;
+							c1X = 267;
+									c1Y = 242;
+						}
+						if(!coinCollect[1])
+									{
+										w2 = false;
+										c2X = 267;
+																c2Y = 292;
+						}
+						if(!coinCollect[2])
+									{
+										w3 = false;
+										c3X = 417;
+																							c3Y = 242;
+						}
+						if(!coinCollect[3])
+									{
+										w4 = false;
+										c4X = 417;
+				 	c4Y = 292;
+						}
 		}
 		if((new Rectangle(x,y,20,20).intersects(new Rectangle(356,U1,14,14))))//U2
 		{
 			fails++;
 			respawn();
+			if(!coinCollect[0])
+						{
+							w1 = false;
+							c1X = 267;
+									c1Y = 242;
+						}
+						if(!coinCollect[1])
+									{
+										w2 = false;
+										c2X = 267;
+																c2Y = 292;
+						}
+						if(!coinCollect[2])
+									{
+										w3 = false;
+										c3X = 417;
+																							c3Y = 242;
+						}
+						if(!coinCollect[3])
+									{
+										w4 = false;
+										c4X = 417;
+				 	c4Y = 292;
+						}
 		}
 		if((new Rectangle(x,y,20,20).intersects(new Rectangle(331,D1,14,14))))//D1
 		{
 			fails++;
 			respawn();
+			if(!coinCollect[0])
+						{
+							w1 = false;
+							c1X = 267;
+									c1Y = 242;
+						}
+						if(!coinCollect[1])
+									{
+										w2 = false;
+										c2X = 267;
+																c2Y = 292;
+						}
+						if(!coinCollect[2])
+									{
+										w3 = false;
+										c3X = 417;
+																							c3Y = 242;
+						}
+						if(!coinCollect[3])
+									{
+										w4 = false;
+										c4X = 417;
+				 	c4Y = 292;
+						}
 		}
 		if((new Rectangle(x,y,20,20).intersects(new Rectangle(381,D1,14,14))))//D2
 		{
 			fails++;
 			respawn();
+			if(!coinCollect[0])
+						{
+							w1 = false;
+							c1X = 267;
+									c1Y = 242;
+						}
+						if(!coinCollect[1])
+									{
+										w2 = false;
+										c2X = 267;
+																c2Y = 292;
+						}
+						if(!coinCollect[2])
+									{
+										w3 = false;
+										c3X = 417;
+																							c3Y = 242;
+						}
+						if(!coinCollect[3])
+									{
+										w4 = false;
+										c4X = 417;
+				 	c4Y = 292;
+						}
+		}
+
+		if((new Rectangle(x,y,20,20).intersects(new Rectangle(a,b,14,14))))//L1
+				{
+					fails++;
+					respawn();
+					if(!coinCollect[0])
+								{
+									w1 = false;
+									c1X = 267;
+											c1Y = 242;
+								}
+								if(!coinCollect[1])
+											{
+												w2 = false;
+												c2X = 267;
+																		c2Y = 292;
+								}
+								if(!coinCollect[2])
+											{
+												w3 = false;
+												c3X = 417;
+																									c3Y = 242;
+								}
+								if(!coinCollect[3])
+											{
+												w4 = false;
+												c4X = 417;
+						 	c4Y = 292;
+								}
+				}
+				if((new Rectangle(x,y,20,20).intersects(new Rectangle(a,b+50,14,14))))//L2
+				{
+					fails++;
+					respawn();
+					if(!coinCollect[0])
+								{
+									w1 = false;
+									c1X = 267;
+											c1Y = 242;
+								}
+								if(!coinCollect[1])
+											{
+												w2 = false;
+												c2X = 267;
+																		c2Y = 292;
+								}
+								if(!coinCollect[2])
+											{
+												w3 = false;
+												c3X = 417;
+																									c3Y = 242;
+								}
+								if(!coinCollect[3])
+											{
+												w4 = false;
+												c4X = 417;
+						 	c4Y = 292;
+								}
+				}
+				if((new Rectangle(x,y,20,20).intersects(new Rectangle(R1,b+25,14,14))))//R1
+				{
+					fails++;
+					respawn();
+					if(!coinCollect[0])
+								{
+									w1 = false;
+									c1X = 267;
+											c1Y = 242;
+								}
+								if(!coinCollect[1])
+											{
+												w2 = false;
+												c2X = 267;
+																		c2Y = 292;
+								}
+								if(!coinCollect[2])
+											{
+												w3 = false;
+												c3X = 417;
+																									c3Y = 242;
+								}
+								if(!coinCollect[3])
+											{
+												w4 = false;
+												c4X = 417;
+						 	c4Y = 292;
+								}
+				}
+				if((new Rectangle(x,y,20,20).intersects(new Rectangle(R1,b+75,14,14))))//R2
+				{
+					fails++;
+					respawn();
+					if(!coinCollect[0])
+								{
+									w1 = false;
+									c1X = 267;
+											c1Y = 242;
+								}
+								if(!coinCollect[1])
+											{
+												w2 = false;
+												c2X = 267;
+																		c2Y = 292;
+								}
+								if(!coinCollect[2])
+											{
+												w3 = false;
+												c3X = 417;
+																									c3Y = 242;
+								}
+								if(!coinCollect[3])
+											{
+												w4 = false;
+												c4X = 417;
+						 	c4Y = 292;
+								}
+				}
+				if((new Rectangle(x,y,20,20).intersects(new Rectangle(306,U1,14,14))))//U1
+				{
+					fails++;
+					respawn();
+					if(!coinCollect[0])
+								{
+									w1 = false;
+									c1X = 267;
+											c1Y = 242;
+								}
+								if(!coinCollect[1])
+											{
+												w2 = false;
+												c2X = 267;
+																		c2Y = 292;
+								}
+								if(!coinCollect[2])
+											{
+												w3 = false;
+												c3X = 417;
+																									c3Y = 242;
+								}
+								if(!coinCollect[3])
+											{
+												w4 = false;
+												c4X = 417;
+						 	c4Y = 292;
+								}
+				}
+				if((new Rectangle(x,y,20,20).intersects(new Rectangle(356,U1,14,14))))//U2
+				{
+					fails++;
+					respawn();
+					if(!coinCollect[0])
+								{
+									w1 = false;
+									c1X = 267;
+											c1Y = 242;
+								}
+								if(!coinCollect[1])
+											{
+												w2 = false;
+												c2X = 267;
+																		c2Y = 292;
+								}
+								if(!coinCollect[2])
+											{
+												w3 = false;
+												c3X = 417;
+																									c3Y = 242;
+								}
+								if(!coinCollect[3])
+											{
+												w4 = false;
+												c4X = 417;
+						 	c4Y = 292;
+								}
+				}
+				if((new Rectangle(x,y,20,20).intersects(new Rectangle(331,D1,14,14))))//D1
+				{
+					fails++;
+					respawn();
+					if(!coinCollect[0])
+								{
+									w1 = false;
+									c1X = 267;
+											c1Y = 242;
+								}
+								if(!coinCollect[1])
+											{
+												w2 = false;
+												c2X = 267;
+																		c2Y = 292;
+								}
+								if(!coinCollect[2])
+											{
+												w3 = false;
+												c3X = 417;
+																									c3Y = 242;
+								}
+								if(!coinCollect[3])
+											{
+												w4 = false;
+												c4X = 417;
+						 	c4Y = 292;
+								}
+				}
+				if((new Rectangle(x,y,20,20).intersects(new Rectangle(381,D1,14,14))))//D2
+				{
+					fails++;
+					respawn();
+					if(!coinCollect[0])
+								{
+									w1 = false;
+									c1X = 267;
+											c1Y = 242;
+								}
+								if(!coinCollect[1])
+											{
+												w2 = false;
+												c2X = 267;
+																		c2Y = 292;
+								}
+								if(!coinCollect[2])
+											{
+												w3 = false;
+												c3X = 417;
+																									c3Y = 242;
+								}
+								if(!coinCollect[3])
+											{
+												w4 = false;
+												c4X = 417;
+						 	c4Y = 292;
+								}
 		}
 	}
 
