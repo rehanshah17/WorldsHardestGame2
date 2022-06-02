@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runnable
 {
@@ -15,26 +16,18 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	private int U1;
 	private int D1;
     private int speed;
-	private int enemySpeed;
-	private int eSpeed;
-    private int hor;
-  	private int c1X;
-	private int c1Y;
-	private int c2X;
-	private int c2Y;
-	private int c3X;
-	private int c3Y;
-	private int c4X;
-	private int c4Y;
-    private int vert;
+	private int enemySpeed,eSpeed;
+    private int hor,vert;
+  	private int c1X,c1Y,c2X,c2Y,c3X,c3Y,c4X,c4Y;
 	private int fails;
 	private Rectangle c1,c2,c3,c4;
-	private int coin;
 	private Polygon border;
 	private Polygon board;
 	private JFrame frame;
 	private Thread t;
 	private boolean gameOn;
+	private boolean kPressed;
+	private boolean checkPoint, firstLife;
 	private Font f;
 	private Color backGround;
 	private Color playerBorder;
@@ -42,9 +35,6 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	private Color tile;
 	private Color innerCoinYellow;
 	private Color outerCoinYellow;
-	private boolean checkPoint,firstTime;
-	private boolean w1,w2,w3,w4;
-	private boolean [] coinCollect;
 	public WorldsHardestGame2lvl11()
 	{
 		frame=new JFrame();
@@ -64,13 +54,15 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		c4X = 417;
 	 	c4Y = 292;
         speed = 2;
-		enemySpeed = 0;
-		eSpeed = -0;
+		enemySpeed = 3;
+		eSpeed = -3;
         hor = 0;
         vert = 0;
 		fails = 0;
-		coin = 0;
-		gameOn=true;
+		gameOn = true;
+		checkPoint = false;
+		firstLife = true;
+		kPressed = false;
 		int[] boarderXPoints = {295, 405, 405, 455, 455, 405, 405, 295, 295, 245, 245, 295};
 		int[] boarderYPoints = {120, 120, 220, 220, 330, 330, 430, 430, 330, 330, 220, 220};
 		border = new Polygon(boarderXPoints, boarderYPoints, boarderXPoints.length);
@@ -91,13 +83,6 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		t=new Thread(this);
 		t.start();
-
-		w1 = false;
-		w2 = false;
-		w3 = false;
-		w4 = false;
-		coinCollect = new boolean[] {false,false,false,false};
-		firstTime = false;
 	}
 	public void paintComponent(Graphics g)
 	{
@@ -117,7 +102,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(f);
 		g2d.drawString("LEVEL: 11",0,40);
-		g2d.drawString("COINS: " + coin,300,40);
+		g2d.drawString("COINS: ",300,40);
 		g2d.drawString("FAILS: "  + fails,550,40);
 
 
@@ -232,7 +217,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 
 
 		//coins
-		if(!w1)
+		//if(!w1)
 		{
 		g2d.setColor(outerCoinYellow);//Top Left Coin
 		g2d.fillOval(c1X, c1Y, 16, 16);
@@ -240,7 +225,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.fillOval(c1X+4, c1Y+4, 8, 8);
 		}
 
-		if(!w2)
+		//if(!w2)
 		{
 		g2d.setColor(outerCoinYellow);//Bottom Left Coin
 		g2d.fillOval(c2X, c2Y, 16, 16);
@@ -248,7 +233,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.fillOval(c2X+4, c2Y+4, 8, 8);
 		}
 
-		if(!w3)
+		//if(!w3)
 		{
 		g2d.setColor(outerCoinYellow);//Top Right Coin
 		g2d.fillOval(c3X, c3Y, 16, 16);
@@ -256,7 +241,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.fillOval(c3X+4, c3Y+4, 8, 8);
 		}
 
-		if(!w4)
+		//if(!w4)
 		{
 		g2d.setColor(outerCoinYellow);//Right Bottom Coin
 		g2d.fillOval(c4X, c4Y, 16, 16);
@@ -314,7 +299,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.fillOval(384,D1+3,8,8);
 
 
-		if(w1&&w2&&w3&&w4&&y>375)
+		if(x == 700)
 		{
 			gameOn = false;
 			g2d.fillRect(0,0,1000,1000);
@@ -331,8 +316,6 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		{
 			if(gameOn)
 			{
-
-
 				c1 = new Rectangle(c1X, c1Y, 16, 16);
 				c2 = new Rectangle(c2X, c2Y, 16, 16);
 				c3 = new Rectangle(c3X, c3Y, 16, 16);
@@ -342,41 +325,32 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 				{
 					c1X = 1000;
 					c1Y = 1000;
-					w1 = true;
+
 				}
 				if(new Rectangle(x,y,19,19).intersects(c2))
 				{
 					c2X = 1000;
 					c2Y = 1000;
-					w2 = true;
+
 				}
 				if(new Rectangle(x,y,19,19).intersects(c3))
 				{
 					c3X = 1000;
 					c3Y = 1000;
-					w3 = true;
+
 				}
 				if(new Rectangle(x,y,19,19).intersects(c4))
 				{
 					c4X = 1000;
 					c4Y = 1000;
-					w4 = true;
 				}
 
-				coin = 0;
-				if(w1)
-					coin++;
-				if(w2)
-					coin++;
-				if(w3)
-					coin++;
-				if(w4)
-					coin++;
-
-				if(checkPoint && !firstTime)
-					checkCheckPoint();
-					checkCollision();
-					checkBorderCollisions();
+				if(new Rectangle(x,y,19,19).intersects(new Rectangle(300,375,100,50)))
+				{
+					checkPoint = true;
+				}
+				checkCollision();
+				checkBorderCollisions();
 
 				//player collisions
 				if(board.contains(new Rectangle(x + hor,y,19,19)))
@@ -385,13 +359,6 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 				if(board.contains(new Rectangle(x,y  + vert,19,19)))
 					y += vert;
 
-				if((new Rectangle(x,y,20,20).intersects(new Rectangle(300,375,100,50))))
-					checkPoint = true;
-
-				if(!firstTime && (new Rectangle(x,y,20,20).intersects(new Rectangle(300,125,100,50))))
-				{
-					checkPoint = true;
-				}
 				try
 				{
 					t.sleep(15);
@@ -406,500 +373,30 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 
 	public void respawn()
 	{
-		if(checkPoint)
-		{
-			x = 341;
-			y = 391;
-		}
-		else{
-			x = 341;
-			y = 141;
-		}
 
 	}
-
-	public void checkCheckPoint()
-	{
-		if(w1)
-			coinCollect[0] = true;
-		if(w2)
-			coinCollect[1] = true;
-		if(w3)
-			coinCollect[2] = true;
-		if(w4)
-			coinCollect[3] = true;
-		firstTime = true;
-	}
-
 	public void checkCollision()
 	{
-		if((new Rectangle(x,y,20,20).intersects(new Rectangle(a,b,14,14))))//L1
-		{
-			fails++;
-			respawn();
+		ArrayList<Rectangle> enemies = new ArrayList<>();
+		enemies.add((new Rectangle(a,b,14,14)));//L1
+		enemies.add((new Rectangle(a,b+50,14,14)));//L2
+		enemies.add((new Rectangle(R1,b+25,14,14)));//R1
+		enemies.add((new Rectangle(R1,b+75,14,14)));//R2
+		enemies.add((new Rectangle(306,U1,14,14)));//U1
+		enemies.add((new Rectangle(356,U1,14,14)));//U2
+		enemies.add((new Rectangle(331,D1,14,14)));//D1
+		enemies.add((new Rectangle(381,D1,14,14)));//D2
 
-			if(!coinCollect[0])
-			{
-				w1 = false;
-				c1X = 267;
-				c1Y = 242;
-			}
-			if(!coinCollect[1])
-			{
-				w2 = false;
-				c2X = 267;
-				c2Y = 292;
-			}
-			if(!coinCollect[2])
-			{
-				w3 = false;
-				c3X = 417;
-				c3Y = 242;
-			}
-			if(!coinCollect[3])
-			{
-				w4 = false;
-				c4X = 417;
-	 			c4Y = 292;
-			}
-		}
-		if((new Rectangle(x,y,20,20).intersects(new Rectangle(a,b+50,14,14))))//L2
+		for(int i = 0; i < enemies.size();i++)
 		{
-			fails++;
-			respawn();
-			if(!coinCollect[0])
+			if(new Rectangle(x,y,20,20).intersects(enemies.get(i)))
 			{
-				w1 = false;
-				c1X = 267;
-						c1Y = 242;
+				fails++;
+				respawn();
 			}
-			if(!coinCollect[1])
-			{
-				w2 = false;
-				c2X = 267;
-				c2Y = 292;
-			}
-			if(!coinCollect[2])
-			{
-				w3 = false;
-				c3X = 417;
-				c3Y = 242;
-			}
-			if(!coinCollect[3])
-			{
-				w4 = false;
-				c4X = 417;
-	 			c4Y = 292;
-			}
-		}
-		if((new Rectangle(x,y,20,20).intersects(new Rectangle(R1,b+25,14,14))))//R1
-		{
-			fails++;
-			respawn();
-			if(!coinCollect[0])
-					{
-						w1 = false;
-						c1X = 267;
-								c1Y = 242;
-					}
-					if(!coinCollect[1])
-								{
-									w2 = false;
-									c2X = 267;
-															c2Y = 292;
-					}
-					if(!coinCollect[2])
-								{
-									w3 = false;
-									c3X = 417;
-																						c3Y = 242;
-					}
-					if(!coinCollect[3])
-								{
-									w4 = false;
-									c4X = 417;
-			 	c4Y = 292;
-					}
-		}
-		if((new Rectangle(x,y,20,20).intersects(new Rectangle(R1,b+75,14,14))))//R2
-		{
-			fails++;
-			respawn();
-			if(!coinCollect[0])
-						{
-							w1 = false;
-							c1X = 267;
-									c1Y = 242;
-						}
-						if(!coinCollect[1])
-									{
-										w2 = false;
-										c2X = 267;
-																c2Y = 292;
-						}
-						if(!coinCollect[2])
-									{
-										w3 = false;
-										c3X = 417;
-																							c3Y = 242;
-						}
-						if(!coinCollect[3])
-									{
-										w4 = false;
-										c4X = 417;
-				 	c4Y = 292;
-						}
-		}
-		if((new Rectangle(x,y,20,20).intersects(new Rectangle(306,U1,14,14))))//U1
-		{
-			fails++;
-			respawn();
-			if(!coinCollect[0])
-						{
-							w1 = false;
-							c1X = 267;
-									c1Y = 242;
-						}
-						if(!coinCollect[1])
-									{
-										w2 = false;
-										c2X = 267;
-																c2Y = 292;
-						}
-						if(!coinCollect[2])
-									{
-										w3 = false;
-										c3X = 417;
-																							c3Y = 242;
-						}
-						if(!coinCollect[3])
-									{
-										w4 = false;
-										c4X = 417;
-				 	c4Y = 292;
-						}
-		}
-		if((new Rectangle(x,y,20,20).intersects(new Rectangle(356,U1,14,14))))//U2
-		{
-			fails++;
-			respawn();
-			if(!coinCollect[0])
-						{
-							w1 = false;
-							c1X = 267;
-									c1Y = 242;
-						}
-						if(!coinCollect[1])
-									{
-										w2 = false;
-										c2X = 267;
-																c2Y = 292;
-						}
-						if(!coinCollect[2])
-									{
-										w3 = false;
-										c3X = 417;
-																							c3Y = 242;
-						}
-						if(!coinCollect[3])
-									{
-										w4 = false;
-										c4X = 417;
-				 	c4Y = 292;
-						}
-		}
-		if((new Rectangle(x,y,20,20).intersects(new Rectangle(331,D1,14,14))))//D1
-		{
-			fails++;
-			respawn();
-			if(!coinCollect[0])
-						{
-							w1 = false;
-							c1X = 267;
-									c1Y = 242;
-						}
-						if(!coinCollect[1])
-									{
-										w2 = false;
-										c2X = 267;
-																c2Y = 292;
-						}
-						if(!coinCollect[2])
-									{
-										w3 = false;
-										c3X = 417;
-																							c3Y = 242;
-						}
-						if(!coinCollect[3])
-									{
-										w4 = false;
-										c4X = 417;
-				 	c4Y = 292;
-						}
-		}
-		if((new Rectangle(x,y,20,20).intersects(new Rectangle(381,D1,14,14))))//D2
-		{
-			fails++;
-			respawn();
-			if(!coinCollect[0])
-						{
-							w1 = false;
-							c1X = 267;
-									c1Y = 242;
-						}
-						if(!coinCollect[1])
-									{
-										w2 = false;
-										c2X = 267;
-																c2Y = 292;
-						}
-						if(!coinCollect[2])
-									{
-										w3 = false;
-										c3X = 417;
-																							c3Y = 242;
-						}
-						if(!coinCollect[3])
-									{
-										w4 = false;
-										c4X = 417;
-				 	c4Y = 292;
-						}
-		}
-
-		if((new Rectangle(x,y,20,20).intersects(new Rectangle(a,b,14,14))))//L1
-				{
-					fails++;
-					respawn();
-					if(!coinCollect[0])
-								{
-									w1 = false;
-									c1X = 267;
-											c1Y = 242;
-								}
-								if(!coinCollect[1])
-											{
-												w2 = false;
-												c2X = 267;
-																		c2Y = 292;
-								}
-								if(!coinCollect[2])
-											{
-												w3 = false;
-												c3X = 417;
-																									c3Y = 242;
-								}
-								if(!coinCollect[3])
-											{
-												w4 = false;
-												c4X = 417;
-						 	c4Y = 292;
-								}
-				}
-				if((new Rectangle(x,y,20,20).intersects(new Rectangle(a,b+50,14,14))))//L2
-				{
-					fails++;
-					respawn();
-					if(!coinCollect[0])
-								{
-									w1 = false;
-									c1X = 267;
-											c1Y = 242;
-								}
-								if(!coinCollect[1])
-											{
-												w2 = false;
-												c2X = 267;
-																		c2Y = 292;
-								}
-								if(!coinCollect[2])
-											{
-												w3 = false;
-												c3X = 417;
-																									c3Y = 242;
-								}
-								if(!coinCollect[3])
-											{
-												w4 = false;
-												c4X = 417;
-						 	c4Y = 292;
-								}
-				}
-				if((new Rectangle(x,y,20,20).intersects(new Rectangle(R1,b+25,14,14))))//R1
-				{
-					fails++;
-					respawn();
-					if(!coinCollect[0])
-								{
-									w1 = false;
-									c1X = 267;
-											c1Y = 242;
-								}
-								if(!coinCollect[1])
-											{
-												w2 = false;
-												c2X = 267;
-																		c2Y = 292;
-								}
-								if(!coinCollect[2])
-											{
-												w3 = false;
-												c3X = 417;
-																									c3Y = 242;
-								}
-								if(!coinCollect[3])
-											{
-												w4 = false;
-												c4X = 417;
-						 	c4Y = 292;
-								}
-				}
-				if((new Rectangle(x,y,20,20).intersects(new Rectangle(R1,b+75,14,14))))//R2
-				{
-					fails++;
-					respawn();
-					if(!coinCollect[0])
-								{
-									w1 = false;
-									c1X = 267;
-											c1Y = 242;
-								}
-								if(!coinCollect[1])
-											{
-												w2 = false;
-												c2X = 267;
-																		c2Y = 292;
-								}
-								if(!coinCollect[2])
-											{
-												w3 = false;
-												c3X = 417;
-																									c3Y = 242;
-								}
-								if(!coinCollect[3])
-											{
-												w4 = false;
-												c4X = 417;
-						 	c4Y = 292;
-								}
-				}
-				if((new Rectangle(x,y,20,20).intersects(new Rectangle(306,U1,14,14))))//U1
-				{
-					fails++;
-					respawn();
-					if(!coinCollect[0])
-								{
-									w1 = false;
-									c1X = 267;
-											c1Y = 242;
-								}
-								if(!coinCollect[1])
-											{
-												w2 = false;
-												c2X = 267;
-																		c2Y = 292;
-								}
-								if(!coinCollect[2])
-											{
-												w3 = false;
-												c3X = 417;
-																									c3Y = 242;
-								}
-								if(!coinCollect[3])
-											{
-												w4 = false;
-												c4X = 417;
-						 	c4Y = 292;
-								}
-				}
-				if((new Rectangle(x,y,20,20).intersects(new Rectangle(356,U1,14,14))))//U2
-				{
-					fails++;
-					respawn();
-					if(!coinCollect[0])
-								{
-									w1 = false;
-									c1X = 267;
-											c1Y = 242;
-								}
-								if(!coinCollect[1])
-											{
-												w2 = false;
-												c2X = 267;
-																		c2Y = 292;
-								}
-								if(!coinCollect[2])
-											{
-												w3 = false;
-												c3X = 417;
-																									c3Y = 242;
-								}
-								if(!coinCollect[3])
-											{
-												w4 = false;
-												c4X = 417;
-						 	c4Y = 292;
-								}
-				}
-				if((new Rectangle(x,y,20,20).intersects(new Rectangle(331,D1,14,14))))//D1
-				{
-					fails++;
-					respawn();
-					if(!coinCollect[0])
-								{
-									w1 = false;
-									c1X = 267;
-											c1Y = 242;
-								}
-								if(!coinCollect[1])
-											{
-												w2 = false;
-												c2X = 267;
-																		c2Y = 292;
-								}
-								if(!coinCollect[2])
-											{
-												w3 = false;
-												c3X = 417;
-																									c3Y = 242;
-								}
-								if(!coinCollect[3])
-											{
-												w4 = false;
-												c4X = 417;
-						 	c4Y = 292;
-								}
-				}
-				if((new Rectangle(x,y,20,20).intersects(new Rectangle(381,D1,14,14))))//D2
-				{
-					fails++;
-					respawn();
-					if(!coinCollect[0])
-								{
-									w1 = false;
-									c1X = 267;
-											c1Y = 242;
-								}
-								if(!coinCollect[1])
-											{
-												w2 = false;
-												c2X = 267;
-																		c2Y = 292;
-								}
-								if(!coinCollect[2])
-											{
-												w3 = false;
-												c3X = 417;
-																									c3Y = 242;
-								}
-								if(!coinCollect[3])
-											{
-												w4 = false;
-												c4X = 417;
-						 	c4Y = 292;
-								}
-		}
+		}		
 	}
+	
 
 	public void checkBorderCollisions()
 	{
@@ -951,6 +448,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	}
 	public void keyReleased(KeyEvent ke)
 	{
+		System.out.println(ke.getKeyCode());
 		if(ke.getKeyCode()==39)//right arrow
 			hor = 0;
 		if(ke.getKeyCode()==37)//left arrow
@@ -959,6 +457,18 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 			vert = 0;
 		if(ke.getKeyCode()==40)//up arrow
 			vert = 0;
+		if(ke.getKeyCode()==75)//k button
+			kPressed = !kPressed;
+			if(kPressed)
+			{
+				enemySpeed = 0;
+				eSpeed = 0;
+			}
+			if(!kPressed)
+			{
+				enemySpeed = 3;
+				eSpeed = -3;
+			}
 
 	}
 	public void keyTyped(KeyEvent ke)
