@@ -17,6 +17,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	private int D1;
     private int speed;
 	private int enemySpeed,eSpeed;
+	private boolean win;
     private int hor,vert;
   	private Coin c1,c2,c3,c4;
 	private int fails;
@@ -62,6 +63,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
         hor = 0;
         vert = 0;
 		fails = 0;
+		win = false;
 		life = new ArrayList<Coin>();
 		perma = new ArrayList<Coin>();
 		gameOn = true;
@@ -299,7 +301,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		g2d.fillOval(384,D1+3,8,8);
 
 
-		if(x == 700)
+		if(win)
 		{
 			gameOn = false;
 			g2d.fillRect(0,0,1000,1000);
@@ -336,6 +338,10 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 				if(board.contains(new Rectangle(x,y  + vert,19,19)))
 					y += vert;
 
+				if((new Rectangle(x,y,19,19).intersects(new Rectangle(300,375,100,50))) && perma.size() == 4)
+				{
+					win = true;
+				}
 				try
 				{
 					t.sleep(15);
@@ -480,6 +486,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 	}
 	public void keyReleased(KeyEvent ke)
 	{
+		System.out.println(ke.getKeyCode());
 		if(ke.getKeyCode()==39)//right arrow
 			hor = 0;
 		if(ke.getKeyCode()==37)//left arrow
@@ -488,18 +495,17 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 			vert = 0;
 		if(ke.getKeyCode()==40)//up arrow
 			vert = 0;
-		if(ke.getKeyCode()==75 && !kPressed)//k button
+		if(ke.getKeyCode()==75)//k button
 		{
-			kPressed = true;
 			enemySpeed = 0;
 			eSpeed = 0;
 		}
-		if(kPressed)
+		if(ke.getKeyCode()==74)//k button
 		{
 			enemySpeed = 3;
 			eSpeed = -3;
-			kPressed = false;
 		}
+	
 		
 
 	}
