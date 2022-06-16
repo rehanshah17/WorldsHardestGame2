@@ -325,10 +325,12 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 				if(new Rectangle(x,y,19,19).intersects(new Rectangle(300,125,100,50)))
 				{
 					firstSpawnPoint = true;
+					SecondSpawnPoint = false;
 				}
 				if(new Rectangle(x,y,19,19).intersects(new Rectangle(300,375,100,50)) )
 				{
 					SecondSpawnPoint = true;
+					firstSpawnPoint = false;
 				}
 				
 				//player collisions
@@ -500,7 +502,7 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 			enemySpeed = 0;
 			eSpeed = 0;
 		}
-		if(ke.getKeyCode()==74)//k button
+		if(ke.getKeyCode()==74)//j button
 		{
 			enemySpeed = 3;
 			eSpeed = -3;
