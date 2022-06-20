@@ -304,10 +304,11 @@ public class WorldsHardestGame2lvl11 extends JPanel implements KeyListener,Runna
 		if(win)
 		{
 			gameOn = false;
+			g2d.setColor(Color.BLACK);
 			g2d.fillRect(0,0,1000,1000);
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(f);
-			g2d.drawString("YOU WIN",0,40);
+			g2d.drawString("YOU WIN",250,300);
 
 		}
 
